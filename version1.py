@@ -130,9 +130,6 @@ def display_hex(a, b, c, rest):
     print(f'  {rest[5]}   {b[1]}   {c[3]}   {rest[3]} ')
     print(f'    {b[0]}  {rest[4]}  {c[4]}  ')
 
-
-# print(solve(5))
-
 for n in range(1, 20):
     result = solve(n)
     if result:

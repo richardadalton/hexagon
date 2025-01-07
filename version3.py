@@ -1,7 +1,5 @@
 import multiprocessing
-
 from itertools import permutations, filterfalse
-from datetime import datetime
 
 NUMBERS = list(range(1, 20))
 TARGET_SUM = 38
@@ -120,6 +118,7 @@ def solve(n):
 
     return "Not Solved"
 
+
 def display_hex(a, b, c, rest):
     print(f'    {c[0]}  {rest[1]}  {b[4]}  ')
     print(f'  {rest[0]}   {c[1]}   {b[3]}   {rest[2]} ')
@@ -130,7 +129,6 @@ def display_hex(a, b, c, rest):
 
 
 if __name__ == '__main__':
-
     pool = multiprocessing.Pool(processes=8)
     print(pool.map(solve, range(1, 20)))
     print("All tasks completed!")

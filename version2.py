@@ -1,7 +1,6 @@
 import multiprocessing
 
 from itertools import permutations, filterfalse
-from datetime import datetime
 
 NUMBERS = list(range(1, 20))
 TARGET_SUM = 38
@@ -131,7 +130,7 @@ if __name__ == '__main__':
 
     processes = []
 
-    for n in range(4, 7):
+    for n in range(1, 20):
         processes.append(multiprocessing.Process(target=solve, args=(n,)))
 
     # Starting processes
