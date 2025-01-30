@@ -5,12 +5,10 @@ import time
 NUMBERS = list(range(1, 20))
 TARGET_SUM = 38
 
-
 def get_sets(size):
     comb = permutations(NUMBERS, size)
     flist = filterfalse(lambda i: sum(i) != TARGET_SUM, comb)
     return set(flist)
-
 
 def fives_common_center(n):
     result = set()
@@ -21,7 +19,6 @@ def fives_common_center(n):
         if f not in result:
             result.add(f)
     return result
-
 
 def solve(n):
     all = set(range(1, 20))
@@ -116,11 +113,8 @@ def solve(n):
                 print("Solution Found")
                 display_hex(fa, fb, fc, (one, two, three, four, five, six))
                 done.value = True
-
                 return True
-
     return False
-
 
 def display_hex(a, b, c, rest):
     print(f'    {c[0]}  {rest[1]}  {b[4]}  ')
@@ -128,7 +122,6 @@ def display_hex(a, b, c, rest):
     print(f'{a[0]}   {a[1]}   {a[2]}   {a[3]}   {a[4]}')
     print(f'  {rest[5]}   {b[1]}   {c[3]}   {rest[3]} ')
     print(f'    {b[0]}  {rest[4]}  {c[4]}  ')
-
 
 def init_pool_processes(shared_value):
     global done
@@ -142,10 +135,9 @@ if __name__ == '__main__':
     start = time.time()
     solved = pool.map(solve, range(1, 20))
     end = time.time()
-    ellapsed = (end - start)
+    elapsed = (end - start)
 
-    ellapsed_mins = int(ellapsed // 60)
-    ellapsed_secs = int(ellapsed % 60)
+    elapsed_mins = int(elapsed // 60)
+    elapsed_secs = int(elapsed % 60)
 
-    print(f'{ellapsed_mins} mins {ellapsed_secs} secs')
-
+    print(f'{elapsed_mins} mins {elapsed_secs} secs')
