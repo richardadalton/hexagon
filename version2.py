@@ -1,10 +1,10 @@
 import multiprocessing
-
 from itertools import permutations, filterfalse
+from ctypes import c_bool
+import time
 
 NUMBERS = list(range(1, 20))
 TARGET_SUM = 38
-
 
 def get_sets(size):
     comb = permutations(NUMBERS, size)
@@ -23,15 +23,12 @@ def fives_common_center(n):
     return result
 
 
-def solve(n):
-    print(f'Trying to solve for {n} in the center')
-
+def solve(n, done):
     all = set(range(1, 20))
     fives = list(fives_common_center(n))
-    print(f'     There are {len(fives)} sets of five to check')
-
     for a in range(len(fives)):
-        print(n, a)
+        if done.value:
+            return False
         fa = fives[a]
         sfa = set(fa)
         for b in range(len(fives)):
@@ -115,7 +112,8 @@ def solve(n):
                     continue
 
                 display_hex(fa, fb, fc, (one, two, three, four, five, six))
-                return
+                done.value = True
+                return True
 
 def display_hex(a, b, c, rest):
     print(f'    {c[0]}  {rest[1]}  {b[4]}  ')
@@ -127,18 +125,25 @@ def display_hex(a, b, c, rest):
 
 
 if __name__ == '__main__':
+    with multiprocessing.Manager() as manager:
+        processes = []
+        done = manager.Value(c_bool, False)
 
-    processes = []
+        start = time.time()
+        for n in range(1, 20):
+            processes.append(multiprocessing.Process(target=solve, args=(n, done)))
 
-    for n in range(1, 20):
-        processes.append(multiprocessing.Process(target=solve, args=(n,)))
+        # Starting processes
+        for p in processes:
+            p.start()
 
-    # Starting processes
-    for p in processes:
-        p.start()
+        # Waiting for processes to complete
+        for p in processes:
+            p.join()
+        end = time.time()
+        elapsed = (end - start)
 
-    # Waiting for processes to complete
-    for p in processes:
-        p.join()
+        elapsed_mins = int(elapsed // 60)
+        elapsed_secs = int(elapsed % 60)
 
-    print("All tasks completed!")
+    print(f'{elapsed_mins} mins {elapsed_secs} secs')

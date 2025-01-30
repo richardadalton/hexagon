@@ -130,7 +130,7 @@ def init_pool_processes(shared_value):
 if __name__ == '__main__':
     from ctypes import c_bool
     done = multiprocessing.Value(c_bool, False)
-    pool = multiprocessing.Pool(initializer=init_pool_processes, initargs=(done,), processes=6)
+    pool = multiprocessing.Pool(initializer=init_pool_processes, initargs=(done,), processes=3)
 
     start = time.time()
     solved = pool.map(solve, range(1, 20))
