@@ -1,5 +1,6 @@
 import multiprocessing
 from itertools import permutations, filterfalse
+import time
 
 NUMBERS = list(range(1, 20))
 TARGET_SUM = 38
@@ -23,14 +24,11 @@ def fives_common_center(n):
 
 
 def solve(n):
-    print(f'Trying to solve for {n} in the center')
-
     all = set(range(1, 20))
     fives = list(fives_common_center(n))
-    print(f'     There are {len(fives)} sets of five to check')
-
     for a in range(len(fives)):
-        print(n, a)
+        if done.value == True:
+            return False
         fa = fives[a]
         sfa = set(fa)
         for b in range(len(fives)):
@@ -39,7 +37,9 @@ def solve(n):
             sfab = sfa.union(sfb)
             if len(sfab) != 9:
                 continue
+
             for c in range(len(fives)):
+
                 fc = fives[c]
                 sfc = set(fc)
                 sfabc = sfab.union(sfc)
@@ -113,10 +113,13 @@ def solve(n):
                 if five + fc[3] + fa[3] + three != 38:
                     continue
 
+                print("Solution Found")
                 display_hex(fa, fb, fc, (one, two, three, four, five, six))
-                return "Solved"
+                done.value = True
 
-    return "Not Solved"
+                return True
+
+    return False
 
 
 def display_hex(a, b, c, rest):
@@ -127,8 +130,22 @@ def display_hex(a, b, c, rest):
     print(f'    {b[0]}  {rest[4]}  {c[4]}  ')
 
 
+def init_pool_processes(shared_value):
+    global done
+    done = shared_value
 
 if __name__ == '__main__':
-    pool = multiprocessing.Pool(processes=8)
-    print(pool.map(solve, range(1, 20)))
-    print("All tasks completed!")
+    from ctypes import c_bool
+    done = multiprocessing.Value(c_bool, False)
+    pool = multiprocessing.Pool(initializer=init_pool_processes, initargs=(done,), processes=6)
+
+    start = time.time()
+    solved = pool.map(solve, range(1, 20))
+    end = time.time()
+    ellapsed = (end - start)
+
+    ellapsed_mins = int(ellapsed // 60)
+    ellapsed_secs = int(ellapsed % 60)
+
+    print(f'{ellapsed_mins} mins {ellapsed_secs} secs')
+
